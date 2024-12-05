@@ -1,6 +1,8 @@
 package com.example.demo.RecordSearch.controller;
 
 
+import com.example.demo.Utils.ApiResponse;
+import com.example.demo.Utils.SuccessCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +20,7 @@ public class RecordSearchRestController {
             @PathVariable("tag") String tag
             )
     {
-        RecordSearchDTO recordSearchDTO = recordSearchService.getRecordSearch(id, tag);
-        return recordSearchDTO;
+        RecordSearchDTO response = recordSearchService.getRecordSearch(id, tag);
+        return ResponseEntity.ok(ApiResponse.success(SuccessCode.GET_SUCCESS, response));
     }
 }
