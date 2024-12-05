@@ -3,7 +3,7 @@ package com.example.demo.User.dto;
 import com.example.demo.User.entity.Users;
 import lombok.Getter;
 
-public class UserResponse {
+public class UsersResponse {
 
    @Getter
     public static class UserResponseDTO{

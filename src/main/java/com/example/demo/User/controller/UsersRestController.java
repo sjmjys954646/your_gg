@@ -1,7 +1,7 @@
 package com.example.demo.User.controller;
 
-import com.example.demo.User.dto.UserResponse;
-import com.example.demo.User.service.UserService;
+import com.example.demo.User.dto.UsersResponse;
+import com.example.demo.User.service.UsersService;
 import com.example.demo.Utils.ApiResponse;
 import com.example.demo.Utils.SuccessCode;
 import lombok.RequiredArgsConstructor;
@@ -12,15 +12,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-public class UserRestController {
-    private final UserService userService;
+public class UsersRestController {
+    private final UsersService usersService;
 
     @GetMapping("getPUUID")
-    public ResponseEntity<ApiResponse<UserResponse.UserResponseDTO>> getUser(
+    public ResponseEntity<ApiResponse<UsersResponse.UserResponseDTO>> getUser(
             @RequestParam("username") String username, @RequestParam("tag") String tag
     )
     {
-        UserResponse.UserResponseDTO response = userService.getUserPUUID(username, tag);
+        UsersResponse.UserResponseDTO response = usersService.getUserPUUID(username, tag);
         return ResponseEntity.ok(ApiResponse.success(SuccessCode.GET_SUCCESS, response));
     }
 }
