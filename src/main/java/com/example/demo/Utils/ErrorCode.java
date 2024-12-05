@@ -13,8 +13,8 @@ public enum ErrorCode {
 
     //API Error
     RIOT_API_ERROR(INTERNAL_SERVER_ERROR, 2001, "RIOT API 에러"),
-    RIOT_API_ID_ERROR(NOT_FOUND, 2002, "RIOT API 아이디가 없음")
-
+    RIOT_API_ID_ERROR(NOT_FOUND, 2002, "RIOT API 아이디가 없음"),
+    RIOT_API_NO_RECENTGAME(NOT_FOUND, 2003, "최근 게임이 없음")
     ;
 
     private final HttpStatus status;

@@ -9,6 +9,7 @@ import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Objects;
 
 public class RecordsResponse {
     @Getter
@@ -92,6 +93,22 @@ public class RecordsResponse {
                 this.death = death;
                 this.assist = assist;
                 this.isBlue = isBlue;
+            }
+
+            @Override
+            public boolean equals(Object o) {
+                if (this == o) return true;
+                if (o == null || getClass() != o.getClass()) return false;
+                UsersInfoDTO that = (UsersInfoDTO) o;
+                return damageToChampion == that.damageToChampion &&
+                        kill == that.kill &&
+                        death == that.death &&
+                        assist == that.assist &&
+                        isBlue == that.isBlue &&
+                        Objects.equals(puuid, that.puuid) &&
+                        Objects.equals(username, that.username) &&
+                        Objects.equals(tag, that.tag) &&
+                        Objects.equals(champion, that.champion);
             }
 
             public static ArrayList<UsersInfoDTO> MakeDTO(ArrayList<RecordUsers> recordUsers) {

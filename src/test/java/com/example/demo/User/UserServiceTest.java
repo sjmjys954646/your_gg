@@ -1,6 +1,5 @@
 package com.example.demo.User;
 
-import com.example.demo.User.dto.UsersResponse;
 import com.example.demo.User.entity.Users;
 import com.example.demo.User.repository.UsersRepository;
 import com.example.demo.User.service.UsersService;

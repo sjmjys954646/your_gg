@@ -9,6 +9,8 @@ import com.example.demo.RecordSearch.repository.RecordsRepository;
 import com.example.demo.RecordSearch.repository.UserRecentRecordRepository;
 import com.example.demo.User.entity.Users;
 import com.example.demo.User.service.UsersService;
+import com.example.demo.Utils.Exceptions.InternalServerError;
+import com.example.demo.Utils.Exceptions.NotFoundException;
 import com.example.demo.Utils.RiotAPI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static com.example.demo.Utils.ErrorCode.RIOT_API_NO_RECENTGAME;
 
 @Transactional
 @RequiredArgsConstructor
@@ -40,12 +44,12 @@ public class RecordsService {
         RecordsResponse.RecordSearchResponseDTO recordSearchResponseDTO = null;
 
         //유저의 최근 Record를 찾아옵니다.
-        Optional<UserRecentRecord> records = userRecentRecordRepository.findMyRecentRecordSearch(curUser.getId());
+        Optional<UserRecentRecord> recentRecord = userRecentRecordRepository.findMyRecentRecordSearch(curUser.getId());
 
         //record에 있는 matchId로 참가자들의 정보를 가져옵니다.
         //최근 record가 없을 경우 RiotAPI를 통해 유저의 가장 최근 경기를 저장합니다.
-        if(records.isPresent()) {
-            ArrayList<RecordUsers> recordUsers = recordUsersRepository.findRecrodUsersByRecordId(records.get().getRecord().getId());
+        if(recentRecord.isPresent()) {
+            ArrayList<RecordUsers> recordUsers = recordUsersRepository.findRecrodUsersByRecordId(recentRecord.get().getRecord().getId());
             ArrayList<RecordUsers> blueRecordUsers = new ArrayList<>();
             ArrayList<RecordUsers> redRecordUsers = new ArrayList<>();
 
@@ -56,7 +60,7 @@ public class RecordsService {
                     redRecordUsers.add(recordUser);
             }
 
-            RecordsResponse.RecordSearchResponseDTO.RecordInfoDTO recordInfoDTO = RecordsResponse.RecordSearchResponseDTO.RecordInfoDTO.MakeDTO(records.get());
+            RecordsResponse.RecordSearchResponseDTO.RecordInfoDTO recordInfoDTO = RecordsResponse.RecordSearchResponseDTO.RecordInfoDTO.MakeDTO(recentRecord.get());
             ArrayList<RecordsResponse.RecordSearchResponseDTO.UsersInfoDTO> blueTeamDTO = RecordsResponse.RecordSearchResponseDTO.UsersInfoDTO.MakeDTO(blueRecordUsers);
             ArrayList<RecordsResponse.RecordSearchResponseDTO.UsersInfoDTO> redTeamDTO = RecordsResponse.RecordSearchResponseDTO.UsersInfoDTO.MakeDTO(redRecordUsers);
             recordSearchResponseDTO = new RecordsResponse.RecordSearchResponseDTO(recordInfoDTO, blueTeamDTO, redTeamDTO);
@@ -70,7 +74,7 @@ public class RecordsService {
 
             //오류 최근 기록이 없음
             if(recentRecordHubo.isEmpty()) {
-                //오류처리
+                 throw new NotFoundException(RIOT_API_NO_RECENTGAME);
             }
             //최근 경기 후보 중 가장 최근에 끝난 경기를 찾아 변환한다.
             for (String matchId : recentRecordHubo) {
@@ -82,11 +86,8 @@ public class RecordsService {
                     recordSearchResponseDTO = hubo;
                 }
             }
-            //TODO 예외처리
-            assert recordSearchResponseDTO != null;
             
             Records record = Records.toEntity(recordSearchResponseDTO.getRecords());
-            //TODO 경기정보가 있으면 저장 안해도됨
             Optional<Records> recordData = recordsRepository.findByMatchId(record.getMatchId());
             if (recordData.isEmpty()) {
                 recordsRepository.save(record);
@@ -108,6 +109,62 @@ public class RecordsService {
             UserRecentRecord userRecentRecord = new UserRecentRecord(record, curUser);
             userRecentRecordRepository.save(userRecentRecord);
         }
+
+        return recordSearchResponseDTO;
+    }
+
+    public RecordsResponse.RecordSearchResponseDTO patchRecords(String username, String tag) {
+        Users curUser = usersService.getUserPUUID(username, tag);
+        String myPUUID = curUser.getPuuid();
+
+        RecordsResponse.RecordSearchResponseDTO recordSearchResponseDTO = null;
+
+        UserRecentRecord recentRecords = userRecentRecordRepository
+                .findMyRecentRecordSearch(curUser.getId())
+                .orElse(new UserRecentRecord());
+
+        ArrayList<String> recentRecordHubo = new ArrayList<>();
+        for (String queue : queueList) {
+            Optional.ofNullable(riotAPI.getMatchIdByQueueFromRiotAPI(myPUUID, queue))
+                    .ifPresent(recentRecordHubo::add);
+        }
+
+        //오류 최근 기록이 없음
+        if(recentRecordHubo.isEmpty()) {
+            throw new NotFoundException(RIOT_API_NO_RECENTGAME);
+        }
+
+        //최근 경기 후보 중 가장 최근에 끝난 경기를 찾아 변환한다.
+        for (String matchId : recentRecordHubo) {
+            RecordsResponse.RecordSearchResponseDTO hubo = riotAPI.getRecordsByMatchId(matchId);
+            if(recordSearchResponseDTO == null) {
+                recordSearchResponseDTO = hubo;
+            }
+            else if(recordSearchResponseDTO.getRecords().getEndTime().getTime() < hubo.getRecords().getEndTime().getTime()){
+                recordSearchResponseDTO = hubo;
+            }
+        }
+
+        Records record = Records.toEntity(recordSearchResponseDTO.getRecords());
+        Optional<Records> recordData = recordsRepository.findByMatchId(record.getMatchId());
+        if (recordData.isEmpty()) {
+            recordsRepository.save(record);
+            for(RecordsResponse.RecordSearchResponseDTO.UsersInfoDTO usersInfoDTO: recordSearchResponseDTO.getBlueTeam()){
+                Users user = usersService.saveUserByPuuid(usersInfoDTO.getPuuid(), usersInfoDTO.getUsername(), usersInfoDTO.getTag());
+                RecordUsers recordUsers = new RecordUsers(record, user, usersInfoDTO);
+                recordUsersRepository.save(recordUsers);
+            }
+            for(RecordsResponse.RecordSearchResponseDTO.UsersInfoDTO usersInfoDTO: recordSearchResponseDTO.getRedTeam()){
+                Users user = usersService.saveUserByPuuid(usersInfoDTO.getPuuid(), usersInfoDTO.getUsername(), usersInfoDTO.getTag());
+                RecordUsers recordUsers = new RecordUsers(record, user, usersInfoDTO);
+                recordUsersRepository.save(recordUsers);
+            }
+        }
+        else{
+            record = recordData.get();
+        }
+
+        recentRecords.setRecord(record);
 
         return recordSearchResponseDTO;
     }
