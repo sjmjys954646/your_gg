@@ -1,12 +1,15 @@
 package com.example.demo.RecordSearch.service;
 
 import com.example.demo.RecordSearch.dto.RecordsResponse;
+import com.example.demo.RecordSearch.entity.Records;
 import com.example.demo.RecordSearch.repository.RecordsRepository;
 import com.example.demo.User.service.UsersService;
 import com.example.demo.Utils.RiotAPI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Transactional
 @RequiredArgsConstructor
@@ -20,9 +23,10 @@ public class RecordsService {
         //id, tag에 맞는 puuid 를 가져옵니다.
         String myPUUID = usersService.getUserPUUID(username, tag).getPuuid();
 
-        //RecordSearch recordSearch = recordSearchRepository.findMyRecentRecordSearch(myPUUID);
+        RecordsResponse.RecordSearchResponseDTO userResponseDTO = null;
+        Optional<Records> records = recordsRepository.findMyRecentRecordSearch(myPUUID);
 
-       /* if(user.isPresent()) {
+        if(records.isPresent()) {
             userResponseDTO = new UsersResponse.UserResponseDTO(user.get());
         }
         else{
@@ -31,7 +35,6 @@ public class RecordsService {
             usersRepository.save(newUsers);
             userResponseDTO = new UsersResponse.UserResponseDTO(newUsers);
         }
-*/
 
         return null;
     }

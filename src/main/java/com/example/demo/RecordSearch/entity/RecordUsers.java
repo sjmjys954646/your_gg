@@ -26,17 +26,14 @@ public class RecordUsers extends BaseTime {
     @ManyToOne(fetch = FetchType.LAZY)
     private Users users;
 
-    //ENUM처리
-    private String position;
     //딜량
     private int deal;
     private String champion;
 
     @Builder
-    public RecordUsers(Records records, Users users, String position, int deal, String champion) {
+    public RecordUsers(Records records, Users users, int deal, String champion) {
         this.records = records;
         this.users = users;
-        this.position = position;
         this.deal = deal;
         this.champion = champion;
     }
