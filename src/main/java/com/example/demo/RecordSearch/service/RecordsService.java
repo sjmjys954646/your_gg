@@ -40,12 +40,26 @@ public class RecordsService {
         RecordsResponse.RecordSearchResponseDTO recordSearchResponseDTO = null;
 
         //유저의 최근 Record를 찾아옵니다.
-        Optional<UserRecentRecord> records = userRecentRecordRepository.findMyRecentRecordSearch(myPUUID);
+        Optional<UserRecentRecord> records = userRecentRecordRepository.findMyRecentRecordSearch(curUser.getId());
 
         //record에 있는 matchId로 참가자들의 정보를 가져옵니다.
         //최근 record가 없을 경우 RiotAPI를 통해 유저의 가장 최근 경기를 저장합니다.
         if(records.isPresent()) {
-            //recordSearchResponseDTO = new RecordsResponse.RecordSearchResponseDTO();
+            ArrayList<RecordUsers> recordUsers = recordUsersRepository.findRecrodUsersByRecordId(records.get().getRecord().getId());
+            ArrayList<RecordUsers> blueRecordUsers = new ArrayList<>();
+            ArrayList<RecordUsers> redRecordUsers = new ArrayList<>();
+
+            for(RecordUsers recordUser : recordUsers) {
+                if(recordUser.getIsBlue())
+                    blueRecordUsers.add(recordUser);
+                else
+                    redRecordUsers.add(recordUser);
+            }
+
+            RecordsResponse.RecordSearchResponseDTO.RecordInfoDTO recordInfoDTO = RecordsResponse.RecordSearchResponseDTO.RecordInfoDTO.MakeDTO(records.get());
+            ArrayList<RecordsResponse.RecordSearchResponseDTO.UsersInfoDTO> blueTeamDTO = RecordsResponse.RecordSearchResponseDTO.UsersInfoDTO.MakeDTO(blueRecordUsers);
+            ArrayList<RecordsResponse.RecordSearchResponseDTO.UsersInfoDTO> redTeamDTO = RecordsResponse.RecordSearchResponseDTO.UsersInfoDTO.MakeDTO(redRecordUsers);
+            recordSearchResponseDTO = new RecordsResponse.RecordSearchResponseDTO(recordInfoDTO, blueTeamDTO, redTeamDTO);
         }
         else{
             ArrayList<String> recentRecordHubo = new ArrayList<>();
@@ -68,10 +82,11 @@ public class RecordsService {
                     recordSearchResponseDTO = hubo;
                 }
             }
-            //예외처리
+            //TODO 예외처리
             assert recordSearchResponseDTO != null;
             
             Records record = Records.toEntity(recordSearchResponseDTO.getRecords());
+            //TODO 경기정보가 있으면 저장 안해도됨
             recordsRepository.save(record);
             UserRecentRecord userRecentRecord = new UserRecentRecord(record, curUser);
             userRecentRecordRepository.save(userRecentRecord);

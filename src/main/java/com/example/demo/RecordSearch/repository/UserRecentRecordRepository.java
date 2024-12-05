@@ -9,6 +9,6 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
 public interface UserRecentRecordRepository extends JpaRepository<UserRecentRecord, Long> {
-    @Query(value = "select v from UserRecentRecord v where v.user.puuid = :puuid")
-    Optional<UserRecentRecord> findMyRecentRecordSearch(@Param("puuid") String puuid);
+    @Query(value = "select v from UserRecentRecord v where v.user.id = :id")
+    Optional<UserRecentRecord> findMyRecentRecordSearch(@Param("id") Long id);
 }

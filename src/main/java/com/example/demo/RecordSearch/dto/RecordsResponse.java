@@ -1,5 +1,8 @@
 package com.example.demo.RecordSearch.dto;
 
+import com.example.demo.RecordSearch.entity.RecordUsers;
+import com.example.demo.RecordSearch.entity.Records;
+import com.example.demo.RecordSearch.entity.UserRecentRecord;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -42,6 +45,27 @@ public class RecordsResponse {
                 this.endTime = endTime;
                 this.bluewin = bluewin;
             }
+
+            public static RecordInfoDTO MakeDTO(UserRecentRecord records) {
+                Records record = records.getRecord();
+                String matchId = record.getMatchId();
+                String gameType = record.getGameType();
+                String gameTime = record.getGameTime();
+                int blueKill = record.getBlueKill();
+                int redKill = record.getRedKill();
+                Date endTime = record.getEndTime();
+                boolean bluewin = record.isBluewin();
+
+                return RecordInfoDTO.builder()
+                        .matchId(matchId)
+                        .gameType(gameType)
+                        .gameTime(gameTime)
+                        .blueKill(blueKill)
+                        .redKill(redKill)
+                        .endTime(endTime)
+                        .bluewin(bluewin)
+                        .build();
+            }
         }
 
         @ToString
@@ -55,9 +79,10 @@ public class RecordsResponse {
             private int kill;
             private int death;
             private int assist;
+            private Boolean isBlue;
 
             @Builder
-            public UsersInfoDTO(String puuid, String username, String tag, int damageToChampion, String champion, int kill, int death, int assist) {
+            public UsersInfoDTO(String puuid, String username, String tag, int damageToChampion, String champion, int kill, int death, int assist, Boolean isBlue) {
                 this.puuid = puuid;
                 this.username = username;
                 this.tag = tag;
@@ -66,6 +91,26 @@ public class RecordsResponse {
                 this.kill = kill;
                 this.death = death;
                 this.assist = assist;
+                this.isBlue = isBlue;
+            }
+
+            public static ArrayList<UsersInfoDTO> MakeDTO(ArrayList<RecordUsers> recordUsers) {
+                ArrayList<UsersInfoDTO> usersInfoDTOs = new ArrayList<>();
+                for (RecordUsers recordUser : recordUsers) {
+                    UsersInfoDTO usersInfoDTO = UsersInfoDTO.builder()
+                            .puuid(recordUser.getUser().getPuuid())
+                            .username(recordUser.getUser().getUsername())
+                            .tag(recordUser.getUser().getTag())
+                            .damageToChampion(recordUser.getDamageToChampion())
+                            .champion(recordUser.getChampion())
+                            .kill(recordUser.getKill())
+                            .death(recordUser.getDeath())
+                            .assist(recordUser.getAssist())
+                            .isBlue(recordUser.getIsBlue())
+                            .build();
+                    usersInfoDTOs.add(usersInfoDTO);
+                }
+                return usersInfoDTOs;
             }
         }
     }

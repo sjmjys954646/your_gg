@@ -147,7 +147,7 @@ public class RiotAPI {
 
                 RecordsResponse.RecordSearchResponseDTO.UsersInfoDTO usersInfoDTO =
                         new RecordsResponse.RecordSearchResponseDTO.UsersInfoDTO(
-                                puuid, username, usertag, damage, championName, kill, death, assist
+                                puuid, username, usertag, damage, championName, kill, death, assist, teamId == 100
                         );
 
                 if (teamId == 100) {

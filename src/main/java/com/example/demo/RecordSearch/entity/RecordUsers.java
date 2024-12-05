@@ -33,6 +33,7 @@ public class RecordUsers extends BaseTime {
     private int kill;
     private int death;
     private int assist;
+    private Boolean isBlue;
 
     @Builder
     public RecordUsers(Records record, Users user, RecordsResponse.RecordSearchResponseDTO.UsersInfoDTO usersInfoDTO) {
@@ -43,5 +44,6 @@ public class RecordUsers extends BaseTime {
         this.kill = usersInfoDTO.getKill();
         this.death = usersInfoDTO.getDeath();
         this.assist = usersInfoDTO.getAssist();
+        this.isBlue = usersInfoDTO.getIsBlue();
     }
 }
