@@ -20,6 +20,7 @@ public class RecordSearchRestController {
             @PathVariable("tag") String tag
             )
     {
+        //TODO 데이터 있는게 있으면 캐시데이터를 불러오고 아니면 라이엇 API를 불러와야함
         RecordSearchDTO response = recordSearchService.getRecordSearch(id, tag);
         return ResponseEntity.ok(ApiResponse.success(SuccessCode.GET_SUCCESS, response));
     }
