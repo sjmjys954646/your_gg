@@ -22,6 +22,7 @@ public class Records extends BaseTime {
     private Long id;
 
     private String matchId;
+    //ENUM 처리
     private String gameType;
     private String gameTime;
     private int blueKill;
