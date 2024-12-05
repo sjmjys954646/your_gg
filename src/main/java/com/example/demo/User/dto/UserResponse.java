@@ -1,6 +1,6 @@
 package com.example.demo.User.dto;
 
-import com.example.demo.User.entity.User;
+import com.example.demo.User.entity.Users;
 import lombok.Getter;
 
 public class UserResponse {
@@ -9,8 +9,8 @@ public class UserResponse {
     public static class UserResponseDTO{
         String puuid;
 
-       public UserResponseDTO(User user) {
-           this.puuid = user.getPuuid();
+       public UserResponseDTO(Users users) {
+           this.puuid = users.getPuuid();
        }
    }
 }

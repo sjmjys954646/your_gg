@@ -1,3 +1,4 @@
+/*
 package com.example.demo.RecordSearch.controller;
 
 
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-/*@RestController
+@RestController
 @RequiredArgsConstructor
 public class RecordSearchRestController {
     private final RecordSearchService recordSearchService;
@@ -25,4 +26,5 @@ public class RecordSearchRestController {
         RecordSearchResponse response = recordSearchService.getRecordSearch(id, tag);
         return ResponseEntity.ok(ApiResponse.success(SuccessCode.GET_SUCCESS, response));
     }
-}*/
+}
+*/

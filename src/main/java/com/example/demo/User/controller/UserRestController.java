@@ -17,7 +17,7 @@ public class UserRestController {
 
     @GetMapping("getPUUID")
     public ResponseEntity<ApiResponse<UserResponse.UserResponseDTO>> getUser(
-            @RequestParam("id") String id, @RequestParam("tag") String tag
+            @RequestParam("username") String username, @RequestParam("tag") String tag
     )
     {
         UserResponse.UserResponseDTO response = userService.getUserPUUID(username, tag);

@@ -9,7 +9,13 @@ import lombok.Getter;
 @Getter
 public enum ErrorCode {
     //Not Found
-    USER_NOT_FOUND(NOT_FOUND, 1101, "사용자를 찾을 수 없습니다.");
+    USER_NOT_FOUND(NOT_FOUND, 1001, "사용자를 찾을 수 없습니다."),
+
+    //API Error
+    RIOT_API_ERROR(INTERNAL_SERVER_ERROR, 2001, "RIOT API 에러")
+
+
+    ;
 
     private final HttpStatus status;
     private final int code;
