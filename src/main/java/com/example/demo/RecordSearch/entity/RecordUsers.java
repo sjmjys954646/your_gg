@@ -1,4 +1,4 @@
 package com.example.demo.RecordSearch.entity;
 
-public class RecordSearch {
+public class RecordUsers {
 }
