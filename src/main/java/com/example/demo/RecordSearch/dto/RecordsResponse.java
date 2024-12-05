@@ -19,17 +19,23 @@ public class RecordsResponse {
         ArrayList<UsersInfoDTO> redTeam;
 
         @Builder
-        public RecordSearchResponseDTO(Records records, ArrayList<RecordUsers> blueTeam, ArrayList<RecordUsers> redTeam) {}
+        public RecordSearchResponseDTO(Records records, ArrayList<UsersInfoDTO> blueTeam, ArrayList<UsersInfoDTO> redTeam) {}
 
         @Getter
         public static class UsersInfoDTO{
-            private int deal;
+            private int damageToChampion;
             private String champion;
+            private int kill;
+            private int death;
+            private int assist;
 
             @Builder
-            public UsersInfoDTO(RecordUsers recordUsers){
-                this.deal = recordUsers.getDeal();
-                this.champion = recordUsers.getChampion();
+            public UsersInfoDTO(int damageToChampion, String champion, int kill, int death, int assist) {
+                this.damageToChampion = damageToChampion;
+                this.champion = champion;
+                this.kill = kill;
+                this.death = death;
+                this.assist = assist;
             }
         }
     }

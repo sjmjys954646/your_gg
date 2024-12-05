@@ -18,7 +18,7 @@ public class UsersService {
     private final RiotAPI riotAPI;
 
     public UsersResponse.UserResponseDTO getUserPUUID(String username, String tag) {
-        Optional<Users> user = findUser(username, tag);
+        Optional<Users> user = usersRepository.findByUsernameAndTag(username, tag);
         UsersResponse.UserResponseDTO userResponseDTO = null;
         //user가 존재할 경우 불러오기
         //user가 존재하지 않을경우 삽입
@@ -37,9 +37,11 @@ public class UsersService {
         return userResponseDTO;
     }
 
-    private Optional<Users> findUser(String username, String tag)
-    {
-        return usersRepository.findByUsernameAndTag(username, tag);
+    public void saveUserByPuuid(String puuid, String username, String tag) {
+        Optional<Users> user = usersRepository.findUserByPuuid(puuid);
+        if(user.isEmpty()) {
+            Users newUsers = Users.toEntity(username, tag, puuid);
+            usersRepository.save(newUsers);
+        }
     }
-
 }

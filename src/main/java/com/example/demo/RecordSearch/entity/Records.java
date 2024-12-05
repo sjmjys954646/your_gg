@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
+import java.util.Date;
+
 @Getter
 @NoArgsConstructor
 @Entity
@@ -27,23 +29,29 @@ public class Records extends BaseTime {
     private String gameTime;
     private int blueKill;
     private int redKill;
+    private Date endTime;
+    private boolean bluewin;
 
     @Builder
-    public Records(String matchId, String gameType, String gameTime, int blueKill, int redKill) {
+    public Records(String matchId, String gameType, String gameTime, int blueKill, int redKill, Date endTime, boolean bluewin) {
         this.matchId = matchId;
         this.gameType = gameType;
         this.gameTime = gameTime;
         this.blueKill = blueKill;
         this.redKill = redKill;
+        this.endTime = endTime;
+        this.bluewin = bluewin;
     }
 
-    public static Records toEntity(String matchId, String gameType, String gameTime, int blueKill, int redKill) {
+    public static Records toEntity(String matchId, String gameType, String gameTime, int blueKill, int redKill, Date endTime, boolean bluewin) {
         return Records.builder()
                 .matchId(matchId)
                 .gameType(gameType)
                 .gameTime(gameTime)
                 .blueKill(blueKill)
                 .redKill(redKill)
+                .endTime(endTime)
+                .bluewin(bluewin)
                 .build();
     }
 }

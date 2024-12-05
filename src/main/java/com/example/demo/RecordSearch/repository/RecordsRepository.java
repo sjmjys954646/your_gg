@@ -8,6 +8,4 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
 public interface RecordsRepository extends JpaRepository<Records, Long> {
-    @Query(value = "select v from Records v where v.puuid = :puuid")
-    Optional<Records> findMyRecentRecordSearch(@Param("puuid") String puuid);
 }
