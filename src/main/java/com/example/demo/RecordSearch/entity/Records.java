@@ -1,5 +1,6 @@
 package com.example.demo.RecordSearch.entity;
 
+import com.example.demo.RecordSearch.dto.RecordsResponse;
 import com.example.demo.User.entity.Users;
 import com.example.demo.Utils.BaseTime;
 import jakarta.persistence.*;
@@ -43,15 +44,15 @@ public class Records extends BaseTime {
         this.bluewin = bluewin;
     }
 
-    public static Records toEntity(String matchId, String gameType, String gameTime, int blueKill, int redKill, Date endTime, boolean bluewin) {
+    public static Records toEntity(RecordsResponse.RecordSearchResponseDTO.RecordInfoDTO recordInfoDTO) {
         return Records.builder()
-                .matchId(matchId)
-                .gameType(gameType)
-                .gameTime(gameTime)
-                .blueKill(blueKill)
-                .redKill(redKill)
-                .endTime(endTime)
-                .bluewin(bluewin)
+                .matchId(recordInfoDTO.getMatchId())
+                .gameType(recordInfoDTO.getGameType())
+                .gameTime(recordInfoDTO.getGameTime())
+                .blueKill(recordInfoDTO.getBlueKill())
+                .redKill(recordInfoDTO.getRedKill())
+                .endTime(recordInfoDTO.getEndTime())
+                .bluewin(recordInfoDTO.getBluewin())
                 .build();
     }
 }

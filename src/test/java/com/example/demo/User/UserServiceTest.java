@@ -30,7 +30,7 @@ public class UserServiceTest {
         String tag = "KR1";
 
         //when
-        UsersResponse.UserResponseDTO user = usersService.getUserPUUID(username, tag);
+        Users user = usersService.getUserPUUID(username, tag);
 
         assertThat(user.getPuuid()).isEqualTo("WM-w8SKG3RATuOSi41mOugd7lMWhjMHuGfGjvwrTzDD76xIs5uvsrFbepjrzgM2AMlSXDG921wCNIg");
     }
@@ -59,7 +59,7 @@ public class UserServiceTest {
         usersRepository.save(newUsers);
 
         //when
-        UsersResponse.UserResponseDTO user = usersService.getUserPUUID(username, tag);
+        Users user = usersService.getUserPUUID(username, tag);
 
         assertThat(user.getPuuid()).isEqualTo("WM-w8SKG3RATuOSi41mOugd7lMWhjMHuGfGjvwrTzDD76xIs5uvsrFbepjrzgM2AMlSXDG921wCNIg");
     }

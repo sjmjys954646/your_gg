@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Date;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @Transactional
@@ -25,15 +27,14 @@ public class RiotAPITest {
 
         //when
         RecordsResponse.RecordSearchResponseDTO recordSearchResponseDTO = riotAPI.getRecordsByMatchId(matchId);
-
-        System.out.println("ASDF");
-        System.out.println(recordSearchResponseDTO.getRecords().toString());
-        for(RecordsResponse.RecordSearchResponseDTO.UsersInfoDTO i : recordSearchResponseDTO.getBlueTeam()){
-            System.out.println(i.toString());
-        }
-        for(RecordsResponse.RecordSearchResponseDTO.UsersInfoDTO i : recordSearchResponseDTO.getRedTeam()){
-            System.out.println(i.toString());
-        }
+        RecordsResponse.RecordSearchResponseDTO.RecordInfoDTO recordInfoDTO = recordSearchResponseDTO.getRecords();
+        //then
+        assertThat(recordInfoDTO.getMatchId()).isEqualTo("KR_7353085063");
+        assertThat(recordInfoDTO.getGameType()).isEqualTo("420");
+        assertThat(recordInfoDTO.getGameTime()).isEqualTo("2135");
+        assertThat(recordInfoDTO.getBlueKill()).isEqualTo(41);
+        assertThat(recordInfoDTO.getRedKill()).isEqualTo(32);
+        assertThat(recordInfoDTO.getEndTime()).isEqualTo(new Date(1730706407678L));
     }
 
     @Test

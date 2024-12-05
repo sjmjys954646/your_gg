@@ -1,5 +1,6 @@
 package com.example.demo.RecordSearch.entity;
 
+import com.example.demo.RecordSearch.dto.RecordsResponse;
 import com.example.demo.User.entity.Users;
 import com.example.demo.Utils.BaseTime;
 import jakarta.persistence.*;
@@ -34,13 +35,13 @@ public class RecordUsers extends BaseTime {
     private int assist;
 
     @Builder
-    public RecordUsers(Records record, Users user, int damageToChampion, String champion, int kill, int death, int assist) {
+    public RecordUsers(Records record, Users user, RecordsResponse.RecordSearchResponseDTO.UsersInfoDTO usersInfoDTO) {
         this.record = record;
         this.user = user;
-        this.damageToChampion = damageToChampion;
-        this.champion = champion;
-        this.kill = kill;
-        this.death = death;
-        this.assist = assist;
+        this.damageToChampion = usersInfoDTO.getDamageToChampion();
+        this.champion = usersInfoDTO.getChampion();
+        this.kill = usersInfoDTO.getKill();
+        this.death = usersInfoDTO.getDeath();
+        this.assist = usersInfoDTO.getAssist();
     }
 }

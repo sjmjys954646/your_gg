@@ -135,6 +135,9 @@ public class RiotAPI {
             JsonNode participants = info.path("participants");
             participants.forEach(participant -> {
                 int teamId = participant.path("teamId").asInt();
+                String puuid = participant.path("puuid").asText();
+                String username = participant.path("riotIdGameName").asText();
+                String usertag = participant.path("riotIdTagline").asText();
                 String championName = participant.path("championName").asText("");
                 int death = participant.path("deaths").asInt(0);
                 int kill = participant.path("kills").asInt(0);
@@ -144,7 +147,7 @@ public class RiotAPI {
 
                 RecordsResponse.RecordSearchResponseDTO.UsersInfoDTO usersInfoDTO =
                         new RecordsResponse.RecordSearchResponseDTO.UsersInfoDTO(
-                                damage, championName, kill, death, assist
+                                puuid, username, usertag, damage, championName, kill, death, assist
                         );
 
                 if (teamId == 100) {

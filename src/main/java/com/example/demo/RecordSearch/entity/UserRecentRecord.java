@@ -1,6 +1,7 @@
 package com.example.demo.RecordSearch.entity;
 
 import com.example.demo.User.entity.Users;
+import com.example.demo.Utils.BaseTime;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,7 +15,7 @@ import org.hibernate.annotations.SQLRestriction;
 @SQLRestriction("is_deleted = FALSE")
 @SQLDelete(sql = "UPDATE userrecentrecords SET deleted_at = CURRENT_TIMESTAMP, is_deleted = TRUE where id = ?")
 @Table(name = "userrecentrecords")
-public class UserRecentRecord {
+public class UserRecentRecord extends BaseTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
