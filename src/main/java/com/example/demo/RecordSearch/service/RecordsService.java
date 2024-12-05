@@ -87,22 +87,26 @@ public class RecordsService {
             
             Records record = Records.toEntity(recordSearchResponseDTO.getRecords());
             //TODO 경기정보가 있으면 저장 안해도됨
-            recordsRepository.save(record);
+            Optional<Records> recordData = recordsRepository.findByMatchId(record.getMatchId());
+            if (recordData.isEmpty()) {
+                recordsRepository.save(record);
+                for(RecordsResponse.RecordSearchResponseDTO.UsersInfoDTO usersInfoDTO: recordSearchResponseDTO.getBlueTeam()){
+                    Users user = usersService.saveUserByPuuid(usersInfoDTO.getPuuid(), usersInfoDTO.getUsername(), usersInfoDTO.getTag());
+                    RecordUsers recordUsers = new RecordUsers(record, user, usersInfoDTO);
+                    recordUsersRepository.save(recordUsers);
+                }
+                for(RecordsResponse.RecordSearchResponseDTO.UsersInfoDTO usersInfoDTO: recordSearchResponseDTO.getRedTeam()){
+                    Users user = usersService.saveUserByPuuid(usersInfoDTO.getPuuid(), usersInfoDTO.getUsername(), usersInfoDTO.getTag());
+                    RecordUsers recordUsers = new RecordUsers(record, user, usersInfoDTO);
+                    recordUsersRepository.save(recordUsers);
+                }
+            }
+            else{
+                record = recordData.get();
+            }
+
             UserRecentRecord userRecentRecord = new UserRecentRecord(record, curUser);
             userRecentRecordRepository.save(userRecentRecord);
-
-            for(RecordsResponse.RecordSearchResponseDTO.UsersInfoDTO usersInfoDTO: recordSearchResponseDTO.getBlueTeam()){
-                //ingame 유저 정보 저장
-                Users user = usersService.saveUserByPuuid(usersInfoDTO.getPuuid(), usersInfoDTO.getUsername(), usersInfoDTO.getTag());
-                RecordUsers recordUsers = new RecordUsers(record, user, usersInfoDTO);
-                recordUsersRepository.save(recordUsers);
-            }
-            for(RecordsResponse.RecordSearchResponseDTO.UsersInfoDTO usersInfoDTO: recordSearchResponseDTO.getRedTeam()){
-                //ingame 유저 정보 저장
-                Users user = usersService.saveUserByPuuid(usersInfoDTO.getPuuid(), usersInfoDTO.getUsername(), usersInfoDTO.getTag());
-                RecordUsers recordUsers = new RecordUsers(record, user, usersInfoDTO);
-                recordUsersRepository.save(recordUsers);
-            }
         }
 
         return recordSearchResponseDTO;

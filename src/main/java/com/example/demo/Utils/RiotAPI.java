@@ -38,7 +38,6 @@ public class RiotAPI {
     public String getPUUIDFromRiotAPI(String username, String tag) {
         String url = String.format("https://asia.api.riotgames.com/riot/account/v1/accounts/by-riot-id/%s/%s", username, tag);
 
-        System.out.println(url);
         HttpHeaders headers = new HttpHeaders();
         headers.set("X-Riot-Token", apiKey);
 
