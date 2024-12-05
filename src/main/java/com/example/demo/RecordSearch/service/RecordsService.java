@@ -26,6 +26,7 @@ public class RecordsService {
     private final UserRecentRecordRepository userRecentRecordRepository;
     private final RiotAPI riotAPI;
 
+    //https://static.developer.riotgames.com/docs/lol/queues.json
     //420 : 솔로랭크 440 : 자유랭크 490 : 일반게임
     private static final ArrayList<String> queueList =  new ArrayList<>(List.of("420", "440", "490"));
 

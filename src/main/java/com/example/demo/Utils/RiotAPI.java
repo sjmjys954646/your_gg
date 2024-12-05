@@ -1,10 +1,9 @@
 package com.example.demo.Utils;
 
 import com.example.demo.RecordSearch.dto.RecordsResponse;
-import com.example.demo.RecordSearch.entity.RecordUsers;
-import com.example.demo.RecordSearch.entity.Records;
 import com.example.demo.Utils.Exceptions.InternalServerError;
 import com.example.demo.Utils.Exceptions.NotFoundException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -15,10 +14,17 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
+import reactor.core.publisher.Mono;
+
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 import static com.example.demo.Utils.ErrorCode.*;
 
@@ -32,6 +38,7 @@ public class RiotAPI {
     public String getPUUIDFromRiotAPI(String username, String tag) {
         String url = String.format("https://asia.api.riotgames.com/riot/account/v1/accounts/by-riot-id/%s/%s", username, tag);
 
+        System.out.println(url);
         HttpHeaders headers = new HttpHeaders();
         headers.set("X-Riot-Token", apiKey);
 
@@ -55,7 +62,6 @@ public class RiotAPI {
                 throw new InternalServerError(RIOT_API_ERROR);
             }
         } catch (HttpClientErrorException.NotFound e) {
-            // 404 에러가 발생하면 NotFoundException을 던짐
             throw new NotFoundException(RIOT_API_ID_ERROR);
         }
     }
@@ -92,86 +98,82 @@ public class RiotAPI {
                 throw new InternalServerError(RIOT_API_ERROR);
             }
         } catch (HttpClientErrorException.NotFound e) {
-            // 404 에러가 발생하면 NotFoundException을 던짐
             throw new NotFoundException(RIOT_API_ID_ERROR);
         }
     }
 
     public RecordsResponse.RecordSearchResponseDTO getRecordsByMatchId(String matchId) {
-        String url = "https://asia.api.riotgames.com//lol/match/v5/matches/"+ matchId;
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("X-Riot-Token", apiKey);
-
-        HttpEntity<String> entity = new HttpEntity<>(headers);
-        RestTemplate restTemplate = new RestTemplate();
+        WebClient webClient = WebClient.builder()
+                .baseUrl("https://asia.api.riotgames.com")
+                .defaultHeader("X-Riot-Token", apiKey) // 기본 헤더 설정
+                .build();
 
         try {
-            ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+            String responseBody = webClient.get()
+                    .uri("/lol/match/v5/matches/{matchId}", matchId)
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block();
 
-            if (response.getStatusCode() == HttpStatus.OK) {
-                try {
-                    ObjectMapper objectMapper = new ObjectMapper();
-                    JsonNode rootNode = objectMapper.readTree(response.getBody());
-                    ArrayList<RecordsResponse.RecordSearchResponseDTO.UsersInfoDTO> blueTeam = new ArrayList<>();
-                    ArrayList<RecordsResponse.RecordSearchResponseDTO.UsersInfoDTO> redTeam = new ArrayList<>();
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode rootNode = objectMapper.readTree(responseBody);
 
-                    //파싱하는부분
-                    JsonNode info = rootNode.get("info");
-                    String gameType = info.get("queueId").asText();
-                    String gameTime = info.get("gameDuration").asText();
-                    String endTime = info.get("gameEndTimestamp").asText();
-                    Date endTimeDate = convertStringEndTimeToDate(endTime);
-                    AtomicInteger bluekill = new AtomicInteger();
-                    AtomicInteger redkill = new AtomicInteger();
-                    AtomicReference<Boolean> blueWin = new AtomicReference<>();
+            JsonNode info = rootNode.get("info");
+            ArrayList<RecordsResponse.RecordSearchResponseDTO.UsersInfoDTO> blueTeam = new ArrayList<>();
+            ArrayList<RecordsResponse.RecordSearchResponseDTO.UsersInfoDTO> redTeam = new ArrayList<>();
 
-                    JsonNode participants = info.get("participants");
-                    participants.forEach(participant -> {
-                        int teamId = participant.get("teamId").asInt();
-                        String championName = participant.get("championName").asText();
-                        int death = participant.get("deaths").asInt();
-                        int kill = participant.get("kills").asInt();
-                        int assist = participant.get("assists").asInt();
-                        boolean win = participant.get("win").asBoolean();
-                        int damage = participant.get("totalDamageDealtToChampions").asInt();
+            String gameType = info.path("queueId").asText("");
+            String gameTime = info.path("gameDuration").asText("");
+            String endTime = info.path("gameEndTimestamp").asText("");
+            Date endTimeDate = convertStringEndTimeToDate(endTime);
 
-                        RecordsResponse.RecordSearchResponseDTO.UsersInfoDTO usersInfoDTO = new RecordsResponse.RecordSearchResponseDTO.UsersInfoDTO(
-                                damage,
-                                championName,
-                                kill,
-                                death,
-                                assist
+            AtomicInteger bluekill = new AtomicInteger();
+            AtomicInteger redkill = new AtomicInteger();
+            AtomicReference<Boolean> blueWin = new AtomicReference<>(null);
+
+            // 참가자 정보 파싱
+            JsonNode participants = info.path("participants");
+            participants.forEach(participant -> {
+                int teamId = participant.path("teamId").asInt();
+                String championName = participant.path("championName").asText("");
+                int death = participant.path("deaths").asInt(0);
+                int kill = participant.path("kills").asInt(0);
+                int assist = participant.path("assists").asInt(0);
+                boolean win = participant.path("win").asBoolean(false);
+                int damage = participant.path("totalDamageDealtToChampions").asInt(0);
+
+                RecordsResponse.RecordSearchResponseDTO.UsersInfoDTO usersInfoDTO =
+                        new RecordsResponse.RecordSearchResponseDTO.UsersInfoDTO(
+                                damage, championName, kill, death, assist
                         );
 
-                        if(teamId == 100){
-                            bluekill.addAndGet(kill);
-                        }
-                        else{
-                            redkill.addAndGet(kill);
-                        }
-
-                        if(blueWin.get() == null){
-                            blueWin.set((teamId == 100 ? win : !win));
-                        }
-                    });
-
-                    Records records = Records.toEntity(matchId, gameType, gameTime, bluekill.get(), redkill.get(), endTimeDate, blueWin.get());
-
-                    RecordsResponse.RecordSearchResponseDTO recordSearchResponseDTO =
-                            new RecordsResponse.RecordSearchResponseDTO(records, blueTeam, redTeam);
-
-                    return recordSearchResponseDTO;
-                } catch (Exception e) {
-                    logger.error("Error parsing the response body", e);
-                    throw new InternalServerError(RIOT_API_ERROR);
+                if (teamId == 100) {
+                    bluekill.addAndGet(kill);
+                    blueTeam.add(usersInfoDTO);
+                } else if (teamId == 200) {
+                    redkill.addAndGet(kill);
+                    redTeam.add(usersInfoDTO);
                 }
-            } else {
-                throw new InternalServerError(RIOT_API_ERROR);
-            }
+
+                if (blueWin.get() == null) {
+                    blueWin.set((teamId == 100) ? win : !win);
+                }
+            });
+
+            // 결과 객체 생성
+            RecordsResponse.RecordSearchResponseDTO.RecordInfoDTO records =
+                    new RecordsResponse.RecordSearchResponseDTO.RecordInfoDTO(
+                            matchId, gameType, gameTime, bluekill.get(), redkill.get(), endTimeDate, blueWin.get()
+                    );
+
+            return new RecordsResponse.RecordSearchResponseDTO(records, blueTeam, redTeam);
+
         } catch (HttpClientErrorException.NotFound e) {
-            // 404 에러가 발생하면 NotFoundException을 던짐
+            logger.error("Match ID not found in Riot API: " + matchId, e);
             throw new NotFoundException(RIOT_API_ID_ERROR);
+        } catch (Exception e) {
+            logger.error("Unexpected error while processing Riot API response", e);
+            throw new InternalServerError(RIOT_API_ERROR);
         }
     }
 
