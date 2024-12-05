@@ -7,7 +7,7 @@ import com.example.demo.Utils.SuccessCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -15,10 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserRestController {
     private final UserService userService;
 
-    @GetMapping("getPUUID/id={id}/tag={tag}")
+    @GetMapping("getPUUID")
     public ResponseEntity<ApiResponse<UserResponse.UserResponseDTO>> getUser(
-            @PathVariable("username") String username,
-            @PathVariable("tag") String tag
+            @RequestParam("id") String id, @RequestParam("tag") String tag
     )
     {
         UserResponse.UserResponseDTO response = userService.getUserPUUID(username, tag);
