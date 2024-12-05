@@ -32,16 +32,20 @@ public class User extends BaseTime {
     @Column(nullable = false)
     private String tag;
 
-    @Column(nullable = false)
-    private String usernameAndTag;
-
     private String puuid;
 
     @Builder
     public User(String username, String tag, String puuid) {
         this.username = username;
         this.tag = tag;
-        this.usernameAndTag = username + "#" + tag;
         this.puuid = puuid;
+    }
+
+    public static User toEntity(String username, String tag, String puuid){
+        return User.builder()
+                .username(username)
+                .tag(tag)
+                .puuid(puuid)
+                .build();
     }
 }
