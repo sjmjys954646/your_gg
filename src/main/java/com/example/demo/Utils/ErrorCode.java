@@ -14,6 +14,8 @@ public enum ErrorCode {
     RIOT_API_ID_ERROR(NOT_FOUND, 2002, "존재하지 않는 아이디 입니다."),
     RIOT_API_NO_RECENTGAME(NOT_FOUND, 2003, "최근에 플레이한 게임이 없습니다."),
 
+    //BadRequest
+    BAD_REQUEST_ERROR(BAD_REQUEST,3001,"Bad Request"),
     ;
 
     private final HttpStatus status;

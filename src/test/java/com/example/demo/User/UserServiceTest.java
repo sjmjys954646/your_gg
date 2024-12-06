@@ -3,6 +3,7 @@ package com.example.demo.User;
 import com.example.demo.User.entity.Users;
 import com.example.demo.User.repository.UsersRepository;
 import com.example.demo.User.service.UsersService;
+import com.example.demo.Utils.Exceptions.BadRequestException;
 import com.example.demo.Utils.Exceptions.NotFoundException;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;

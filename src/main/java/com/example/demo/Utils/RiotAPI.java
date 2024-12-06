@@ -1,6 +1,7 @@
 package com.example.demo.Utils;
 
 import com.example.demo.RecordSearch.dto.RecordsResponse;
+import com.example.demo.Utils.Exceptions.BadRequestException;
 import com.example.demo.Utils.Exceptions.InternalServerError;
 import com.example.demo.Utils.Exceptions.NotFoundException;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -61,6 +62,8 @@ public class RiotAPI {;
             }
         } catch (HttpClientErrorException.NotFound e) {
             throw new NotFoundException(RIOT_API_ID_ERROR);
+        } catch (HttpClientErrorException.BadRequest e) {
+            throw new BadRequestException(BAD_REQUEST_ERROR);
         }
     }
 
