@@ -1,6 +1,7 @@
 package com.example.demo.Utils;
 
 import com.example.demo.RecordSearch.dto.RecordsResponse;
+import com.example.demo.Utils.Exceptions.BadRequestException;
 import com.example.demo.Utils.Exceptions.InternalServerError;
 import com.example.demo.Utils.Exceptions.NotFoundException;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -30,8 +31,7 @@ import static com.example.demo.Utils.ErrorCode.*;
 import static java.lang.Math.max;
 
 @Component
-public class RiotAPI {
-    private static final Logger logger = LoggerFactory.getLogger(RiotAPI.class);
+public class RiotAPI {;
 
     @Value("${riot.developer.key}")
     private String apiKey;
@@ -55,7 +55,6 @@ public class RiotAPI {
                     String puuid = rootNode.get("puuid").asText();
                     return puuid;
                 } catch (Exception e) {
-                    logger.error("Error parsing the response body", e);
                     throw new InternalServerError(RIOT_API_ERROR);
                 }
             } else {
@@ -63,6 +62,8 @@ public class RiotAPI {
             }
         } catch (HttpClientErrorException.NotFound e) {
             throw new NotFoundException(RIOT_API_ID_ERROR);
+        } catch (HttpClientErrorException.BadRequest e) {
+            throw new BadRequestException(BAD_REQUEST_ERROR);
         }
     }
 
@@ -91,7 +92,6 @@ public class RiotAPI {
                     }
 
                 } catch (Exception e) {
-                    logger.error("Error parsing the response body", e);
                     throw new InternalServerError(RIOT_API_ERROR);
                 }
             } else {
@@ -179,10 +179,8 @@ public class RiotAPI {
             return new RecordsResponse.RecordSearchResponseDTO(records, blueTeam, redTeam);
 
         } catch (HttpClientErrorException.NotFound e) {
-            logger.error("Match ID not found in Riot API: " + matchId, e);
             throw new NotFoundException(RIOT_API_ID_ERROR);
         } catch (Exception e) {
-            logger.error("Unexpected error while processing Riot API response", e);
             throw new InternalServerError(RIOT_API_ERROR);
         }
     }

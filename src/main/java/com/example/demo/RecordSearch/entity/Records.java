@@ -1,9 +1,11 @@
 package com.example.demo.RecordSearch.entity;
 
 import com.example.demo.RecordSearch.dto.RecordsResponse;
-import com.example.demo.User.entity.Users;
 import com.example.demo.Utils.BaseTime;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,10 +26,15 @@ public class Records extends BaseTime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Size(max = 20, message = "길이는 최대 20자여야 합니다.")
     private String matchId;
-    //ENUM 처리
+
+    @Digits(integer = 10, fraction = 0, message = "최대 10자리 숫자만 가능합니다.")
     private String gameType;
+
+    @Digits(integer = 10, fraction = 0, message = "최대 10자리 숫자만 가능합니다.")
     private String gameTime;
+
     private int blueKill;
     private int redKill;
     private Date endTime;

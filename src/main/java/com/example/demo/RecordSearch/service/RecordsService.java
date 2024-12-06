@@ -9,7 +9,6 @@ import com.example.demo.RecordSearch.repository.RecordsRepository;
 import com.example.demo.RecordSearch.repository.UserRecentRecordRepository;
 import com.example.demo.User.entity.Users;
 import com.example.demo.User.service.UsersService;
-import com.example.demo.Utils.Exceptions.InternalServerError;
 import com.example.demo.Utils.Exceptions.NotFoundException;
 import com.example.demo.Utils.RiotAPI;
 import lombok.RequiredArgsConstructor;

@@ -14,7 +14,7 @@ public class Config implements WebMvcConfigurer {
                 .allowedOrigins("http://localhost:63342")
                 .allowedMethods("*")
                 .allowedHeaders("*")
-                .allowCredentials(true) // 쿠키 인증 요청 허용
+                .allowCredentials(true)
                 .maxAge(3000);
     }
 }

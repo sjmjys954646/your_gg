@@ -3,6 +3,7 @@ package com.example.demo.User;
 import com.example.demo.User.entity.Users;
 import com.example.demo.User.repository.UsersRepository;
 import com.example.demo.User.service.UsersService;
+import com.example.demo.Utils.Exceptions.BadRequestException;
 import com.example.demo.Utils.Exceptions.NotFoundException;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
@@ -43,7 +44,7 @@ public class UserServiceTest {
 
         assertThatThrownBy(() -> usersService.getUserPUUID(username, tag))
                 .isInstanceOf(NotFoundException.class)
-                .hasMessage("RIOT API 아이디가 없음");
+                .hasMessage("존재하지 않는 아이디 입니다.");
     }
 
     @Test

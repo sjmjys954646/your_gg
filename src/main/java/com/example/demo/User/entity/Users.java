@@ -3,6 +3,7 @@ package com.example.demo.User.entity;
 import com.example.demo.Utils.BaseTime;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,14 +28,15 @@ public class Users extends BaseTime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Pattern(regexp = "^[^!@#$%^&*(),.?\":{}|<>_+\\-=\\[\\]';/]*$", message = "특수문자는 사용할 수 없습니다.")
+    @Pattern(regexp = "^[^!@#$%^&*(),.?\":{}|<>_+\\-=\\[\\]';/]{1,50}$", message = "특수문자는 사용할 수 없습니다. 50자 이내여야합니다.")
     @Column(nullable = false)
     private String username;
 
-    @Pattern(regexp = "^[^!@#$%^&*(),.?\":{}|<>_+\\-=\\[\\]';/]*$", message = "특수문자는 사용할 수 없습니다.")
+    @Pattern(regexp = "^[^!@#$%^&*(),.?\":{}|<>_+\\-=\\[\\]';/]{1,50}", message = "특수문자는 사용할 수 없습니다. 50자 이내여야합니다.")
     @Column(nullable = false)
     private String tag;
 
+    @Size(max = 100, message = "길이는 최대 100자여야 합니다.")
     private String puuid;
 
     @Builder
