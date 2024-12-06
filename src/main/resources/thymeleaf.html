@@ -128,9 +128,9 @@
                 .then(response => {
                     if (!response.ok) {
                         return response.json().then(errorData => {
-                            console.error('Error:', errorData.message); // 서버에서 보낸 오류 메시지 출력
-                            alert(`Error: ${errorData.message}`); // 사용자에게 오류 메시지 표시
-                            throw new Error(errorData.message); // 오류를 throw하여 catch로 넘김
+                            console.error('Error:', errorData.message);
+                            alert(`Error: ${errorData.message}`);
+                            throw new Error(errorData.message);
                         });
                     }
                     return response.json();
@@ -147,14 +147,14 @@
             const tag = document.getElementById('email-input').value;
 
             fetch(`http://localhost:8080/patchRecords?username=${encodeURIComponent(username)}&tag=${encodeURIComponent(tag)}`, {
-                method: 'PATCH' // PATCH 요청으로 설정
+                method: 'PATCH'
             })
                 .then(response => {
                     if (!response.ok) {
                         return response.json().then(errorData => {
-                            console.error('Error:', errorData.message); // 서버에서 보낸 오류 메시지 출력
-                            alert(`Error: ${errorData.message}`); // 사용자에게 오류 메시지 표시
-                            throw new Error(errorData.message); // 오류를 throw하여 catch로 넘김
+                            console.error('Error:', errorData.message);
+                            alert(`Error: ${errorData.message}`);
+                            throw new Error(errorData.message);
                         });
                     }
                     return response.json();

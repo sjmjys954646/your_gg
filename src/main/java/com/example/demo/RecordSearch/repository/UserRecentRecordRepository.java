@@ -1,6 +1,5 @@
 package com.example.demo.RecordSearch.repository;
 
-import com.example.demo.RecordSearch.entity.Records;
 import com.example.demo.RecordSearch.entity.UserRecentRecord;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
