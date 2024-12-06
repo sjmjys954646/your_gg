@@ -140,7 +140,11 @@
             fetch(`http://localhost:80/getRecords?username=${encodeURIComponent(username)}&tag=${encodeURIComponent(tag)}`)
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error("Network Error");
+                        return response.json().then(errorData => {
+                            console.error('Error:', errorData.message); // 서버에서 보낸 오류 메시지 출력
+                            alert(`Error: ${errorData.message}`); // 사용자에게 오류 메시지 표시
+                            throw new Error(errorData.message); // 오류를 throw하여 catch로 넘김
+                        });
                     }
                     return response.json();
                 })
@@ -160,7 +164,11 @@
             })
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error("Network Error");
+                        return response.json().then(errorData => {
+                            console.error('Error:', errorData.message); // 서버에서 보낸 오류 메시지 출력
+                            alert(`Error: ${errorData.message}`); // 사용자에게 오류 메시지 표시
+                            throw new Error(errorData.message); // 오류를 throw하여 catch로 넘김
+                        });
                     }
                     return response.json();
                 })

@@ -4,10 +4,10 @@ import com.example.demo.Utils.ErrorCode;
 import lombok.Getter;
 
 @Getter
-public class IllegalArgumentError extends RuntimeException {
+public class ForbiddenException extends RuntimeException {
     private final ErrorCode code;
 
-    public IllegalArgumentError(ErrorCode code) {
+    public ForbiddenException(ErrorCode code) {
         super(code.getMessage());
         this.code = code;
     }
