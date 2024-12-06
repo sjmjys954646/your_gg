@@ -43,7 +43,7 @@ public class UserServiceTest {
 
         assertThatThrownBy(() -> usersService.getUserPUUID(username, tag))
                 .isInstanceOf(NotFoundException.class)
-                .hasMessage("RIOT API 아이디가 없음");
+                .hasMessage("존재하지 않는 아이디 입니다.");
     }
 
     @Test

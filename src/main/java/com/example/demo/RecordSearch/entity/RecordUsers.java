@@ -28,10 +28,9 @@ public class RecordUsers extends BaseTime {
     @ManyToOne(fetch = FetchType.LAZY)
     private Users user;
 
-    //딜량
     private int damageToChampion;
 
-    @Pattern(regexp = "^[a-zA-Z]{1,20}$", message = "영어 알파벳만 입력 가능하며 20자 이내여야합니다")
+    @Pattern(regexp = "^[a-zA-Z]{1,50}$", message = "영어 알파벳만 입력 가능하며 50자 이내여야합니다")
     private String champion;
 
     private int kill;

@@ -29,7 +29,7 @@ public class Records extends BaseTime {
     @Size(max = 20, message = "길이는 최대 20자여야 합니다.")
     private String matchId;
 
-    @Pattern(regexp = "^[a-zA-Z]{1,20}$", message = "영어 알파벳만 입력 가능하며 20자 이내여야합니다")
+    @Digits(integer = 10, fraction = 0, message = "최대 10자리 숫자만 가능합니다.")
     private String gameType;
 
     @Digits(integer = 10, fraction = 0, message = "최대 10자리 숫자만 가능합니다.")

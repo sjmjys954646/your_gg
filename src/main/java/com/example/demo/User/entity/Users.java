@@ -28,15 +28,15 @@ public class Users extends BaseTime {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Pattern(regexp = "^[^!@#$%^&*(),.?\":{}|<>_+\\-=\\[\\]';/]{1,20}$", message = "특수문자는 사용할 수 없습니다. 20자 이내여야합니다.")
+    @Pattern(regexp = "^[^!@#$%^&*(),.?\":{}|<>_+\\-=\\[\\]';/]{1,50}$", message = "특수문자는 사용할 수 없습니다. 50자 이내여야합니다.")
     @Column(nullable = false)
     private String username;
 
-    @Pattern(regexp = "^[^!@#$%^&*(),.?\":{}|<>_+\\-=\\[\\]';/]{1,20}", message = "특수문자는 사용할 수 없습니다. 20자 이내여야합니다.")
+    @Pattern(regexp = "^[^!@#$%^&*(),.?\":{}|<>_+\\-=\\[\\]';/]{1,50}", message = "특수문자는 사용할 수 없습니다. 50자 이내여야합니다.")
     @Column(nullable = false)
     private String tag;
 
-    @Size(max = 50, message = "길이는 최대 50자여야 합니다.")
+    @Size(max = 100, message = "길이는 최대 100자여야 합니다.")
     private String puuid;
 
     @Builder
