@@ -27,6 +27,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
 import static com.example.demo.Utils.ErrorCode.*;
+import static java.lang.Math.max;
 
 @Component
 public class RiotAPI {
@@ -129,6 +130,9 @@ public class RiotAPI {
             AtomicInteger bluekill = new AtomicInteger();
             AtomicInteger redkill = new AtomicInteger();
             AtomicReference<Boolean> blueWin = new AtomicReference<>(null);
+            AtomicInteger blueGold = new AtomicInteger();
+            AtomicInteger redGold = new AtomicInteger();
+            AtomicInteger maxDamage = new AtomicInteger(0);
 
             // 참가자 정보 파싱
             JsonNode participants = info.path("participants");
@@ -143,6 +147,8 @@ public class RiotAPI {
                 int assist = participant.path("assists").asInt(0);
                 boolean win = participant.path("win").asBoolean(false);
                 int damage = participant.path("totalDamageDealtToChampions").asInt(0);
+                int gold = participant.path("goldEarned").asInt(0);
+                maxDamage.set(Math.max(maxDamage.get(), damage));
 
                 RecordsResponse.RecordSearchResponseDTO.UsersInfoDTO usersInfoDTO =
                         new RecordsResponse.RecordSearchResponseDTO.UsersInfoDTO(
@@ -152,9 +158,11 @@ public class RiotAPI {
                 if (teamId == 100) {
                     bluekill.addAndGet(kill);
                     blueTeam.add(usersInfoDTO);
+                    blueGold.addAndGet(gold);
                 } else if (teamId == 200) {
                     redkill.addAndGet(kill);
                     redTeam.add(usersInfoDTO);
+                    redGold.addAndGet(gold);
                 }
 
                 if (blueWin.get() == null) {
@@ -165,7 +173,7 @@ public class RiotAPI {
             // 결과 객체 생성
             RecordsResponse.RecordSearchResponseDTO.RecordInfoDTO records =
                     new RecordsResponse.RecordSearchResponseDTO.RecordInfoDTO(
-                            matchId, gameType, gameTime, bluekill.get(), redkill.get(), endTimeDate, blueWin.get()
+                            matchId, gameType, gameTime, bluekill.get(), redkill.get(), endTimeDate, blueWin.get(),blueGold.get(),redGold.get(), maxDamage.get()
                     );
 
             return new RecordsResponse.RecordSearchResponseDTO(records, blueTeam, redTeam);

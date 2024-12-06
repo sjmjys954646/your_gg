@@ -35,9 +35,12 @@ public class RecordsResponse {
             private int redKill;
             private Date endTime;
             private Boolean bluewin;
+            private int blueGold;
+            private int redGold;
+            private int maxDamage;
 
             @Builder
-            public RecordInfoDTO(String matchId, String gameType, String gameTime, int blueKill, int redKill,Date endTime ,boolean bluewin) {
+            public RecordInfoDTO(String matchId, String gameType, String gameTime, int blueKill, int redKill,Date endTime ,boolean bluewin, int blueGold, int redGold, int maxDamage) {
                 this.matchId = matchId;
                 this.gameType = gameType;
                 this.gameTime = gameTime;
@@ -45,6 +48,9 @@ public class RecordsResponse {
                 this.redKill = redKill;
                 this.endTime = endTime;
                 this.bluewin = bluewin;
+                this.blueGold = blueGold;
+                this.redGold = redGold;
+                this.maxDamage = maxDamage;
             }
 
             public static RecordInfoDTO MakeDTO(UserRecentRecord records) {
@@ -56,6 +62,9 @@ public class RecordsResponse {
                 int redKill = record.getRedKill();
                 Date endTime = record.getEndTime();
                 boolean bluewin = record.isBluewin();
+                int blueGold = record.getBlueGold();
+                int redGold = record.getRedGold();
+                int maxDamage = record.getMaxDamage();
 
                 return RecordInfoDTO.builder()
                         .matchId(matchId)
@@ -65,6 +74,9 @@ public class RecordsResponse {
                         .redKill(redKill)
                         .endTime(endTime)
                         .bluewin(bluewin)
+                        .blueGold(blueGold)
+                        .redGold(redGold)
+                        .maxDamage(maxDamage)
                         .build();
             }
         }

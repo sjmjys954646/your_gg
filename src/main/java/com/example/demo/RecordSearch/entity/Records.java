@@ -32,9 +32,12 @@ public class Records extends BaseTime {
     private int redKill;
     private Date endTime;
     private boolean bluewin;
+    private int blueGold;
+    private int redGold;
+    private int maxDamage;
 
     @Builder
-    public Records(String matchId, String gameType, String gameTime, int blueKill, int redKill, Date endTime, boolean bluewin) {
+    public Records(String matchId, String gameType, String gameTime, int blueKill, int redKill, Date endTime, boolean bluewin, int blueGold, int redGold, int maxDamage) {
         this.matchId = matchId;
         this.gameType = gameType;
         this.gameTime = gameTime;
@@ -42,6 +45,9 @@ public class Records extends BaseTime {
         this.redKill = redKill;
         this.endTime = endTime;
         this.bluewin = bluewin;
+        this.blueGold = blueGold;
+        this.redGold = redGold;
+        this.maxDamage = maxDamage;
     }
 
     public static Records toEntity(RecordsResponse.RecordSearchResponseDTO.RecordInfoDTO recordInfoDTO) {
@@ -53,6 +59,8 @@ public class Records extends BaseTime {
                 .redKill(recordInfoDTO.getRedKill())
                 .endTime(recordInfoDTO.getEndTime())
                 .bluewin(recordInfoDTO.getBluewin())
+                .blueGold(recordInfoDTO.getBlueGold())
+                .redGold(recordInfoDTO.getRedGold())
                 .build();
     }
 }
