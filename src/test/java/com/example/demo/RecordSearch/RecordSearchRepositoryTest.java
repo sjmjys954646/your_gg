@@ -1,4 +1,4 @@
-package com.example.demo.User;
+package com.example.demo.RecordSearch;
 
 import com.example.demo.RecordSearch.dto.RecordsResponse;
 import com.example.demo.RecordSearch.entity.RecordUsers;

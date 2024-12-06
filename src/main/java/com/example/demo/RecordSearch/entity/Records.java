@@ -61,6 +61,7 @@ public class Records extends BaseTime {
                 .bluewin(recordInfoDTO.getBluewin())
                 .blueGold(recordInfoDTO.getBlueGold())
                 .redGold(recordInfoDTO.getRedGold())
+                .maxDamage(recordInfoDTO.getMaxDamage())
                 .build();
     }
 }

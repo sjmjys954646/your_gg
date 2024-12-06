@@ -1,0 +1,133 @@
+{
+  "status": 200,
+  "code": 200,
+  "message": "조회 성공",
+  "data": {
+    "records": {
+      "matchId": "KR_7358346186",
+      "gameType": "440",
+      "gameTime": "2419",
+      "blueKill": 35,
+      "redKill": 50,
+      "endTime": "2024-11-08T13:21:08.539+00:00",
+      "bluewin": false,
+      "blueGold": 72788,
+      "redGold": 81016,
+      "maxDamage": 55112
+    },
+    "blueTeam": [
+      {
+        "puuid": "dMoSBbZV69hi9ZTOOgbprR468grC4nUWnI0sa-H9uTztr5bkehzfo9szP8whriIqcjkoKCsSNVtCXw",
+        "username": "JIGJAG",
+        "tag": "KR1",
+        "damageToChampion": 37513,
+        "champion": "Sion",
+        "kill": 7,
+        "death": 5,
+        "assist": 11,
+        "isBlue": true
+      },
+      {
+        "puuid": "CDrZnYYRK0sGwQBZG8hI2-xG4e2vj93wP-HpEaJO5m7j1Zz49g8rt8Xruzz3EIEM26poDJetmnUIjg",
+        "username": "타락파워고래",
+        "tag": "KR1",
+        "damageToChampion": 27191,
+        "champion": "LeeSin",
+        "kill": 8,
+        "death": 11,
+        "assist": 11,
+        "isBlue": true
+      },
+      {
+        "puuid": "ohmTcPTuOTShg_3WH6FyX4MaRzneBQNpsirSod7zrp4sqyfmGYYsc0lWfs7hhom7vAtb0Q2BuVrsWA",
+        "username": "이쥬노",
+        "tag": "KR1",
+        "damageToChampion": 53635,
+        "champion": "Hwei",
+        "kill": 10,
+        "death": 12,
+        "assist": 11,
+        "isBlue": true
+      },
+      {
+        "puuid": "6X5V3l4LQgibIDsM287rfcmZvvNoG1Fj5D-FwEWbJYlAI0sVr6igLjMJnPj7QqcHWxKIrJIVEKZiRg",
+        "username": "새콤달콤유자차",
+        "tag": "KR1",
+        "damageToChampion": 44959,
+        "champion": "Caitlyn",
+        "kill": 7,
+        "death": 9,
+        "assist": 17,
+        "isBlue": true
+      },
+      {
+        "puuid": "3RG7EYpeoR_oKa2U6o5TllghPSQ7XEAkaZubZcAm6ZOZl_bpkEjVXobd5O04k7aX-1rIzwjXX9usVA",
+        "username": "우락부락잼민이",
+        "tag": "KR2",
+        "damageToChampion": 10400,
+        "champion": "Lulu",
+        "kill": 3,
+        "death": 13,
+        "assist": 19,
+        "isBlue": true
+      }
+    ],
+    "redTeam": [
+      {
+        "puuid": "tKLwY5njGOlzqDyH7Pyo87gvAbYLHTX2S479YBnDSKMgnXzio1NdioapSSULR1LGwFoJtnw3wysxmA",
+        "username": "부패의 손길",
+        "tag": "KR1",
+        "damageToChampion": 36322,
+        "champion": "Camille",
+        "kill": 7,
+        "death": 8,
+        "assist": 11,
+        "isBlue": false
+      },
+      {
+        "puuid": "Z6uC1kPG8wXJ2dDJqE0GDpJqPdmrzabZiPDvBFaLzy335n0t1T8vyo0BXe34fVsKwuPL9JYPLb3qfA",
+        "username": "asdfs",
+        "tag": "KR1",
+        "damageToChampion": 54764,
+        "champion": "Kayn",
+        "kill": 21,
+        "death": 5,
+        "assist": 14,
+        "isBlue": false
+      },
+      {
+        "puuid": "xBTXaPCQhv44n2jk2ih7Pm2RInL-GNbZzgvWmEGh0WFQA7eMXM0yinc0cOz2aZleNN6JB9nDOk9mag",
+        "username": "이기는방법을까먹은사람",
+        "tag": "loose",
+        "damageToChampion": 55112,
+        "champion": "AurelionSol",
+        "kill": 15,
+        "death": 7,
+        "assist": 16,
+        "isBlue": false
+      },
+      {
+        "puuid": "hdpGDpIbRBbSremERP7AlldOcdrBQY1qa7NnwMsozUl7TgN6AmJAionBTw-g53xqzmHRqW-TCYUxxQ",
+        "username": "흑몽환",
+        "tag": "29296",
+        "damageToChampion": 38087,
+        "champion": "Ashe",
+        "kill": 7,
+        "death": 6,
+        "assist": 19,
+        "isBlue": false
+      },
+      {
+        "puuid": "WM-w8SKG3RATuOSi41mOugd7lMWhjMHuGfGjvwrTzDD76xIs5uvsrFbepjrzgM2AMlSXDG921wCNIg",
+        "username": "더유자소전",
+        "tag": "KR1",
+        "damageToChampion": 10139,
+        "champion": "Rakan",
+        "kill": 0,
+        "death": 9,
+        "assist": 35,
+        "isBlue": false
+      }
+    ]
+  }
+}
