@@ -124,7 +124,7 @@
             const username = document.getElementById('username-input').value;
             const tag = document.getElementById('email-input').value;
 
-            fetch(`http://localhost:80/getRecords?username=${encodeURIComponent(username)}&tag=${encodeURIComponent(tag)}`)
+            fetch(`http://localhost:8080/getRecords?username=${encodeURIComponent(username)}&tag=${encodeURIComponent(tag)}`)
                 .then(response => {
                     if (!response.ok) {
                         return response.json().then(errorData => {
@@ -146,7 +146,7 @@
             const username = document.getElementById('username-input').value;
             const tag = document.getElementById('email-input').value;
 
-            fetch(`http://localhost:80/patchRecords?username=${encodeURIComponent(username)}&tag=${encodeURIComponent(tag)}`, {
+            fetch(`http://localhost:8080/patchRecords?username=${encodeURIComponent(username)}&tag=${encodeURIComponent(tag)}`, {
                 method: 'PATCH' // PATCH 요청으로 설정
             })
                 .then(response => {
