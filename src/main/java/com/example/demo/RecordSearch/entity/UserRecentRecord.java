@@ -25,7 +25,7 @@ public class UserRecentRecord extends BaseTime {
     @ManyToOne(fetch = FetchType.LAZY)
     private Records record;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     private Users user;
 
     @Builder
